@@ -1,0 +1,62 @@
+trigger:
+  branches:
+    include:
+    - "master"
+
+variables:
+  vmImage: 'windows-2019'
+  jsonPath: "services.json"
+  location: 'locationPlaceholder'
+  serviceGroup: 'serviceGroupPlaceholder'
+
+stages:
+- stage: deploy_dev001
+  displayName: deploy dev001
+  jobs:
+  - template: ci/deployServices.yml
+    parameters:
+      connectedServiceName: "${{ format('{0}-dev001-sub-spn', variables.serviceGroup) }}"
+      environmentName: 'dev001'
+      location: '${{ variables.location }}'
+      jsonPath: '${{ variables.jsonPath }}'
+      serviceGroup: '${{ variables.serviceGroup }}'
+      vmImage: '${{ variables.vmImage }}'
+
+#- stage: deploy_tst001
+#  dependsOn: deploy_dev001
+#  displayName: deploy tst001
+#  jobs:
+#  - template: ci/deployServices.yml
+#    parameters:
+#      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
+#      environmentName: 'tst001'
+#      location: '${{ variables.location }}'
+#      jsonPath: '${{ variables.jsonPath }}'
+#      serviceGroup: '${{ variables.serviceGroup }}'
+#      vmImage: '${{ variables.vmImage }}'
+
+#- stage: deploy_acc001
+#  dependsOn: deploy_tst001
+#  displayName: deploy acc001
+#  jobs:
+#  - template: ci/deployServices.yml
+#    parameters:
+#      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
+#      environmentName: 'acc001'
+#      location: '${{ variables.location }}'
+#      jsonPath: '${{ variables.jsonPath }}'
+#      serviceGroup: '${{ variables.serviceGroup }}'
+#      vmImage: '${{ variables.vmImage }}'
+
+#- stage: deploy_prd001
+#  dependsOn: deploy_acc001
+#  displayName: deploy prd001
+#  jobs:
+#  - template: ci/deployServices.yml
+#    parameters:
+#      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
+#      environmentName: 'prd001'
+#      location: '${{ variables.location }}'
+#      jsonPath: '${{ variables.jsonPath }}'
+#      serviceGroup: '${{ variables.serviceGroup }}'
+#      vmImage: '${{ variables.vmImage }}'

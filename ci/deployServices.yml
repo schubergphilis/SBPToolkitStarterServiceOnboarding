@@ -1,0 +1,23 @@
+parameters:
+  connectedServiceName: ''
+  environmentName: ''
+  jsonPath:
+  location: ''
+  serviceGroup: ''
+  vmImage: ''
+
+
+jobs:
+- job:  deploy_${{ parameters.environmentName }}
+  displayName: "${{ format('deploy {0}', parameters.environmentName) }}"
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+  - task: schubergphilis.sbp-azure-toolkit-beta.SBPServicesOnboarding.SBPServicesOnboarding@1
+    displayName: "${{ format('SBP Services Onboarding {0} environment: {1}', parameters.serviceGroup, parameters.environmentName) }}"
+    inputs:
+      ConnectedServiceName: ${{ parameters.connectedServiceName }}
+      Location: ${{ parameters.location }}
+      Environment: ${{ parameters.environmentName }}
+      CreateServicePrincipal: false
+      JsonFilePath: ${{ parameters.jsonPath }}

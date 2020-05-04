@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/schubergphilis/Azure/master/Services/schema.json",
+    "contentVersion": "1.0.0.0",
+    "defaults": {
+        "serviceGroup": "serviceGroupPlaceholder",
+        "roles": [
+            "contributor",
+            "reader"
+        ],
+        "tags": {
+            "projectcode": "projectCoePlaceholder",
+            "costcenter": "costCentrePlaceholder",
+            "servicegroup": "serviceGroupPlaceholder"
+        }
+    },
+    "services": [
+        {
+            "name": "core",
+            "shortName": "core",
+            "roles": {},
+            "resourceGroup": {
+                "tags": {
+                    "service": "core"
+                },
+                "sequence": 0
+            }
+        },
+        {
+            "name": "networking",
+            "shortName": "ntwk",
+            "roles": {},
+            "resourceGroup": {
+                "tags": {
+                    "service": "ntwk"
+                },
+                "sequence": 0
+            }
+        }
+    ]
+}
