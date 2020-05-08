@@ -1,3 +1,15 @@
+###############################################################################
+# Schuberg Philis
+#
+# Services Onboarding
+#
+# Please see readme.md for details
+###############################################################################
+#
+
+#
+#################################################################################################
+
 trigger:
   branches:
     include:
@@ -5,15 +17,26 @@ trigger:
 
 variables:
   vmImage: 'windows-2019'
-  jsonPath: "services.json"
-  location: 'locationPlaceholder'
-  serviceGroup: 'serviceGroupPlaceholder'
+  jsonPath: '$(Pipeline.Workspace)/artifact/s/services.json'
+  location: 'West Europe'
+  serviceGroup: 'svgr'
+
+resources:
+  repositories:
+    - repository: sources
+      type: git
+      name: ccoe/sources
+      ref: refs/heads/master
 
 stages:
+- template: Pipelines/stages/publishArtifact.yml@sources
+  parameters:
+    vmImage: '${{ variables.vmImage }}'
+
 - stage: deploy_dev001
   displayName: deploy dev001
   jobs:
-  - template: ci/deployServices.yml
+  - template: Pipelines/jobs/deployServices.yml@sources
     parameters:
       connectedServiceName: "${{ format('{0}-dev001-sub-spn', variables.serviceGroup) }}"
       environmentName: 'dev001'
@@ -26,7 +49,7 @@ stages:
 #  dependsOn: deploy_dev001
 #  displayName: deploy tst001
 #  jobs:
-#  - template: ci/deployServices.yml
+#  - template: Pipelines/jobs/deployServices.yml@sources
 #    parameters:
 #      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
 #      environmentName: 'tst001'
@@ -34,12 +57,12 @@ stages:
 #      jsonPath: '${{ variables.jsonPath }}'
 #      serviceGroup: '${{ variables.serviceGroup }}'
 #      vmImage: '${{ variables.vmImage }}'
-
+#
 #- stage: deploy_acc001
 #  dependsOn: deploy_tst001
 #  displayName: deploy acc001
 #  jobs:
-#  - template: ci/deployServices.yml
+#  - template: Pipelines/jobs/deployServices.yml@sources
 #    parameters:
 #      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
 #      environmentName: 'acc001'
@@ -47,12 +70,12 @@ stages:
 #      jsonPath: '${{ variables.jsonPath }}'
 #      serviceGroup: '${{ variables.serviceGroup }}'
 #      vmImage: '${{ variables.vmImage }}'
-
+#
 #- stage: deploy_prd001
 #  dependsOn: deploy_acc001
 #  displayName: deploy prd001
 #  jobs:
-#  - template: ci/deployServices.yml
+#  - template: Pipelines/jobs/deployServices.yml@sources
 #    parameters:
 #      connectedServiceName: "${{ format('{0}-tst001-sub-spn', variables.serviceGroup) }}"
 #      environmentName: 'prd001'
